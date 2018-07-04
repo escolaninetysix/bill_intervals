@@ -154,7 +154,7 @@ int main(int argc, char* argv[])
 
 	Balance = 0.0;
 
-	std::ofstream BillsOut = std::ofstream( "Bills.txt", std::ios::out);
+	std::ofstream BillsOut = std::ofstream( "Bills.csv", std::ios::out);
 
 	while (!done)
 	{
@@ -602,7 +602,7 @@ void AdvanceDate(short& month, short& day, short& year)
 void PrintTransaction(double Amount, short Month, short Day, 
 		short Year, char* Description, std::ofstream& BillsOut)
 {
-	BillsOut <<Amount << "\t" << Month<<"-"<<Day<<"-"<<Year<<"\t"<<Description<<std::endl;
+	BillsOut <<Amount << "," << Month<<"-"<<Day<<"-"<<Year<<","<<Description<<std::endl;
 	return;
 }
 
@@ -618,7 +618,7 @@ void AddInAllOnce(OnceLink* headOnce, double& Balance,
 			&& currentOnce->StartY==CurrY)
 		{
 			Balance+=currentOnce->Amount;
-			BillsOut << Balance <<"\t";
+			BillsOut << Balance <<",";
 			PrintTransaction(currentOnce->Amount,
 				CurrM, CurrD, CurrY,
 				currentOnce->Description, BillsOut);
@@ -648,7 +648,7 @@ void AddInAllInterval(IntervalLink* headInterval, double& Balance,
 			if (currentInterval->Counter==0)
 			{
 				Balance+=currentInterval->Amount;
-				BillsOut << Balance <<"\t";
+				BillsOut << Balance <<",";
 				PrintTransaction(currentInterval->Amount,
 					CurrM, CurrD, CurrY,
 					currentInterval->Description, BillsOut);
@@ -680,7 +680,7 @@ void AddInAllMonthly(MonthlyLink* headMonthly, double& Balance,
 			if (CurrD==currentMonthly->StartD)
 			{
 				Balance+=currentMonthly->Amount;
-				BillsOut << Balance <<"\t";
+				BillsOut << Balance <<",";
 				PrintTransaction(currentMonthly->Amount,
 					CurrM, CurrD, CurrY,
 					currentMonthly->Description, BillsOut);
@@ -717,7 +717,7 @@ void AddInAllBimonthly(BimonthlyLink* headBimonthly, double& Balance,
 				)
 			{
 				Balance+=currentBimonthly->Amount;
-				BillsOut << Balance <<"\t";
+				BillsOut << Balance <<",";
 				PrintTransaction(currentBimonthly->Amount,
 					CurrM, CurrD, CurrY,
 					currentBimonthly->Description, BillsOut);
