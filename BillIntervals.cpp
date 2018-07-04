@@ -1,8 +1,9 @@
 // BillIntervals.cpp : Defines the entry point for the console application.
 //
-
-#include "stdafx.h"
-
+#include <string>
+#include <ios>
+#include <iostream>
+#include <fstream>
 
 /* Note on format of input txt file:
 	All of the transaction start dates must occur after the file Start date, else 
@@ -106,19 +107,22 @@ int GetBills(short&, short&, short&,
 void AdvanceDate(short& month, short& day, short& year);
 
 void PrintTransaction(double Amount, short Month, short Day, 
-					  short Year, char* Description, ofstream& BillsOut); 
+					  short Year, char* Description, std::ofstream& BillsOut); 
 
 void AddInAllOnce(OnceLink* headOnce, double& Balance, short CurrM, 
-				   short CurrD, short CurrY, ofstream& BillsOut );
+				   short CurrD, short CurrY, std::ofstream& BillsOut );
 
 void AddInAllInterval(IntervalLink* headInterval, double& Balance,
-					  short CurrM, short CurrD, short CurrY, ofstream& BillsOut);
+					  short CurrM, short CurrD, short CurrY, std::ofstream& BillsOut);
 
 void AddInAllMonthly(MonthlyLink* headMonthly, double& Balance,
-					 short CurrM, short CurrD, short CurrY, ofstream& BillsOut);
+					 short CurrM, short CurrD, short CurrY, std::ofstream& BillsOut);
 
 void AddInAllBimonthly(BimonthlyLink* headMonthly, double& Balance,
-					 short CurrM, short CurrD, short CurrY, ofstream& BillsOut);
+					 short CurrM, short CurrD, short CurrY, std::ofstream& BillsOut);
+
+// BillIntervals.cpp : Defines the entry point for the console application.
+//
 
 int main(int argc, char* argv[])
 {
@@ -138,7 +142,7 @@ int main(int argc, char* argv[])
 				headOnce, headInterval, headMonthly, headBimonthly);
 	if (nResult==-1)
 	{
-		cout << "Couldn't read data file.\n";
+		std::cout << "Couldn't read data file.\n";
 		return -1;
 	}
 
@@ -150,7 +154,7 @@ int main(int argc, char* argv[])
 
 	Balance = 0.0;
 
-	ofstream BillsOut = ofstream( "Bills.txt", ios::out);
+	std::ofstream BillsOut = std::ofstream( "Bills.txt", std::ios::out);
 
 	while (!done)
 	{
@@ -166,7 +170,9 @@ int main(int argc, char* argv[])
 	
 	BillsOut.close();
 
-	cout << "End balance: " << Balance << endl;
+	std::cout << "End balance: " 
+		<< Balance 
+		<< std::endl;
 
 	return 0;
 }
@@ -187,7 +193,7 @@ int StringToNums(char* line, short& month, short& day,
 		|| line[9] > 57 || line[9] < 48
 		) 
 	{
-		cout << "Couldn't read the date '"<<line<<"'.  Use format mm.dd.yyyy\n";
+		std::cout << "Couldn't read the date '"<<line<<"'.  Use format mm.dd.yyyy\n";
 		return (-1);
 	}
 	else  // valid looking date, so return it:
@@ -213,11 +219,11 @@ int StringToNumber(char* line, short& number)
 		if (line[i]< 48 
 			|| line[i]> 57)
 		{
-			cout << "Number in input '" << line << "' contained non-number characters.\n";
+			std::cout << "Number in input '" << line << "' contained non-number characters.\n";
 			return -1;
 		}
 		number=number*10+(line[i]-48);
-		//cout << "Dollars intermediate:"<<dollars<<endl;
+		//std::cout << "Dollars intermediate:"<<dollars<<std::endl;
 	}
 	return 0;
 }
@@ -229,7 +235,7 @@ int StringToDollars(char* line, short& minus, short& dollars, short& cents)
 	dollars=0;
 	cents=0;
 	i=0;
-//	cout << "toDollars line:" << line << endl;
+//	std::cout << "toDollars line:" << line << std::endl;
 	minus = 0;
 	if (line[0]=='-')
 	{
@@ -248,35 +254,35 @@ int StringToDollars(char* line, short& minus, short& dollars, short& cents)
 	}
 	if (done!=1)
 	{
-		cout << "Couldn't use line '" << line << "'" << endl << " - not in the dollar/cent format d.cc, dd.cc, ddd.cc, etc.\n";
+		std::cout << "Couldn't use line '" << line << "'" << std::endl << " - not in the dollar/cent format d.cc, dd.cc, ddd.cc, etc.\n";
 		return -1;
 	}
 	else
 	{
 		dotpos=i;
-		//cout << "dotpos set to:" << dotpos << endl;
+		//std::cout << "dotpos set to:" << dotpos << std::endl;
 	}
 	for (i=(0+1*(minus==1));i<dotpos;i++)
 	{
 		if (line[i]< 48 
 			|| line[i]> 57)
 		{
-			cout << "Couldn't use line '" << line << "'" << endl << " - not in the dollar/cent format d.cc, dd.cc, ddd.cc, etc.\n";
+			std::cout << "Couldn't use line '" << line << "'" << std::endl << " - not in the dollar/cent format d.cc, dd.cc, ddd.cc, etc.\n";
 			return -1;
 		}
 		dollars=dollars*10+(line[i]-48);
-		//cout << "Dollars intermediate:"<<dollars<<endl;
+		//std::cout << "Dollars intermediate:"<<dollars<<std::endl;
 	}
 	if (line[dotpos+1]< 48 || line[dotpos+1]>57
 		|| line[dotpos+2]< 48 || line[dotpos+2]>57
 		|| line[dotpos+3]!='\0'
 		)
 	{
-		cout << "Couldn't use line '" << line << "'" << endl << " - not in the dollar/cent format d.cc, dd.cc, ddd.cc, etc.\n";
+		std::cout << "Couldn't use line '" << line << "'" << std::endl << " - not in the dollar/cent format d.cc, dd.cc, ddd.cc, etc.\n";
 		return -1;
 	}
 	cents=10*(line[dotpos+1]-48)+(line[dotpos+2]-48);
-//	cout << minus << ", " << dollars << ", " << cents << endl;
+//	std::cout << minus << ", " << dollars << ", " << cents << std::endl;
 	return 0;
 }
 
@@ -288,7 +294,7 @@ int GetBills(short&BeginM, short&BeginD, short&BeginY,
 {
 	int nResult, done;
 
-	ifstream BillMakerFile = ifstream( "BillMakerList.txt", ios::in);
+	std::ifstream BillMakerFile = std::ifstream( "BillMakerList.txt", std::ios::in);
 	
 	// read in the listing's beginning date:
 	char line[100];
@@ -302,21 +308,21 @@ int GetBills(short&BeginM, short&BeginD, short&BeginY,
 	nResult=StringToNums(line, BeginM, BeginD, BeginY);
 	if (nResult==-1)
 	{
-		cout << "Couldn't read Begin date for listing\n";
+		std::cout << "Couldn't read Begin date for listing\n";
 		BillMakerFile.close();
 		return (-1);
 	}
-	cout << "Start: " << BeginM << "/" << BeginD << "/" << BeginY << endl;
+	std::cout << "Start: " << BeginM << "/" << BeginD << "/" << BeginY << std::endl;
 
 	BillMakerFile >> line;
 	nResult=StringToNums(line, EndM, EndD, EndY);
 	if (nResult==-1)
 	{
-		cout << "Couldn't read the first date\n";
+		std::cout << "Couldn't read the first date\n";
 		BillMakerFile.close();
 		return (-1);
 	}
-	cout << "End: " << EndM << "/" << EndD << "/" << EndY << endl;
+	std::cout << "End: " << EndM << "/" << EndD << "/" << EndY << std::endl;
 
 	done = 0;
 
@@ -338,7 +344,7 @@ int GetBills(short&BeginM, short&BeginD, short&BeginY,
 			//parse the 5 lines into the correct list:
 			if (strcmp("Once", line1)==0)
 			{	
-				//cout << "read " << line1 << endl;
+				//std::cout << "read " << line1 << std::endl;
 
 				// parse data
 				nResult= StringToNums(line3, Month, Day, Year);
@@ -368,12 +374,12 @@ int GetBills(short&BeginM, short&BeginD, short&BeginY,
 				headOnce->StartY = Year;
 				headOnce->Amount = (1.0-2.0*(Minus==1))*
 					((double)Dollars+( (double)Cents /100.0));
-				strcpy(headOnce->Description, line5);
+				strcpy_s(headOnce->Description,99, line5);
 				
 			}
 			else if (strcmp("Interval", line1)==0)
 			{
-				//cout << "read " << line1<< endl;
+				//std::cout << "read " << line1<< std::endl;
 
 				// parse data
 				nResult= StringToNumber(line2, Interval);
@@ -403,9 +409,9 @@ int GetBills(short&BeginM, short&BeginD, short&BeginY,
 					|| (Year==BeginY && Month==BeginM && Day<BeginD)
 					)
 				{
-					cout << "Start date of '" << line5 << 
+					std::cout << "Start date of '" << line5 << 
 					"' occurs before report Begin date, please make it on or after report Begin date."
-						<< endl;
+						<< std::endl;
 					BillMakerFile.close();
 					return -1;
 				}
@@ -427,11 +433,11 @@ int GetBills(short&BeginM, short&BeginD, short&BeginY,
 				headInterval->StartY = Year;
 				headInterval->Amount = (1.0-2.0*(Minus==1))*
 					((double)Dollars+( (double)Cents /100.0));
-				strcpy(headInterval->Description, line5);
+				strcpy_s(headInterval->Description,99, line5);
 			}
 			else if (strcmp("Monthly", line1)==0)
 			{
-				//cout << "read " << line1<< endl;
+				//std::cout << "read " << line1<< std::endl;
 
 				// parse data
 				if (nResult==-1) 
@@ -460,9 +466,9 @@ int GetBills(short&BeginM, short&BeginD, short&BeginY,
 					|| (Year==BeginY && Month==BeginM && Day<BeginD)
 					)
 				{
-					cout << "Start date of '" << line5 << 
+					std::cout << "Start date of '" << line5 << 
 					"' occurs before report Begin date, please make it on or after report Begin date."
-						<< endl;
+						<< std::endl;
 					BillMakerFile.close();
 					return -1;
 				}
@@ -480,13 +486,13 @@ int GetBills(short&BeginM, short&BeginD, short&BeginY,
 				headMonthly->StartY = Year;
 				headMonthly->Amount = (1.0-2.0*(Minus==1))*
 					((double)Dollars+( (double)Cents /100.0));
-				strcpy(headMonthly->Description, line5);
+				strcpy_s(headMonthly->Description,99, line5);
 				headMonthly->HasStarted=0;
 			}
 
 			else if (strcmp("Bimonthly", line1)==0)
 			{
-				//cout << "read " << line1<< endl;
+				//std::cout << "read " << line1<< std::endl;
 
 				// parse data
 				if (nResult==-1) 
@@ -515,9 +521,9 @@ int GetBills(short&BeginM, short&BeginD, short&BeginY,
 					|| (Year==BeginY && Month==BeginM && Day<BeginD)
 					)
 				{
-					cout << "Start date of '" << line5 << 
+					std::cout << "Start date of '" << line5 << 
 					"' occurs before report Begin date, please make it on or after report Begin date."
-						<< endl;
+						<< std::endl;
 					BillMakerFile.close();
 					return -1;
 				}
@@ -535,12 +541,12 @@ int GetBills(short&BeginM, short&BeginD, short&BeginY,
 				headBimonthly->StartY = Year;
 				headBimonthly->Amount = (1.0-2.0*(Minus==1))*
 					((double)Dollars+( (double)Cents /100.0));
-				strcpy(headBimonthly->Description, line5);
+				strcpy_s(headBimonthly->Description,99, line5);
 				headBimonthly->HasStarted=0;
 			}
 			else
 			{
-				cout << "Couldn't read line: " << line1 << "-- aborting file read"<< endl;
+				std::cout << "Couldn't read line: " << line1 << "-- aborting file read"<< std::endl;
 				BillMakerFile.close();
 				return (-1);
 			}
@@ -594,15 +600,15 @@ void AdvanceDate(short& month, short& day, short& year)
 }
 
 void PrintTransaction(double Amount, short Month, short Day, 
-		short Year, char* Description, ofstream& BillsOut)
+		short Year, char* Description, std::ofstream& BillsOut)
 {
-	BillsOut <<Amount << "\t" << Month<<"-"<<Day<<"-"<<Year<<"\t"<<Description<<endl;
+	BillsOut <<Amount << "\t" << Month<<"-"<<Day<<"-"<<Year<<"\t"<<Description<<std::endl;
 	return;
 }
 
 
 void AddInAllOnce(OnceLink* headOnce, double& Balance,
-				  short CurrM, short CurrD, short CurrY, ofstream& BillsOut)
+				  short CurrM, short CurrD, short CurrY, std::ofstream& BillsOut)
 {
 	OnceLink* currentOnce = headOnce;
 	while (currentOnce!=NULL)
@@ -624,7 +630,7 @@ void AddInAllOnce(OnceLink* headOnce, double& Balance,
 }
 
 void AddInAllInterval(IntervalLink* headInterval, double& Balance,
-					  short CurrM, short CurrD, short CurrY, ofstream& BillsOut)
+					  short CurrM, short CurrD, short CurrY, std::ofstream& BillsOut)
 {
 	IntervalLink* currentInterval = headInterval;
 	while (currentInterval!=NULL)
@@ -657,7 +663,7 @@ void AddInAllInterval(IntervalLink* headInterval, double& Balance,
 }
 
 void AddInAllMonthly(MonthlyLink* headMonthly, double& Balance,
-					 short CurrM, short CurrD, short CurrY, ofstream& BillsOut)
+					 short CurrM, short CurrD, short CurrY, std::ofstream& BillsOut)
 {
 	MonthlyLink* currentMonthly = headMonthly;
 	while (currentMonthly!=NULL)
@@ -686,7 +692,7 @@ void AddInAllMonthly(MonthlyLink* headMonthly, double& Balance,
 }
 
 void AddInAllBimonthly(BimonthlyLink* headBimonthly, double& Balance,
-					 short CurrM, short CurrD, short CurrY, ofstream& BillsOut)
+					 short CurrM, short CurrD, short CurrY, std::ofstream& BillsOut)
 {
 	int length[12]={31, 0, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
