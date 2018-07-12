@@ -374,7 +374,11 @@ int GetBills(short&BeginM, short&BeginD, short&BeginY,
 				headOnce->StartY = Year;
 				headOnce->Amount = (1.0-2.0*(Minus==1))*
 					((double)Dollars+( (double)Cents /100.0));
-				strcpy_s(headOnce->Description,99, line5);
+#ifdef TARGET_OS_MAC
+                strncpy(headOnce->Description,line5,99);
+#else
+                strcpy_s(headOnce->Description,99, line5);
+#endif
 				
 			}
 			else if (strcmp("Interval", line1)==0)
@@ -433,7 +437,11 @@ int GetBills(short&BeginM, short&BeginD, short&BeginY,
 				headInterval->StartY = Year;
 				headInterval->Amount = (1.0-2.0*(Minus==1))*
 					((double)Dollars+( (double)Cents /100.0));
-				strcpy_s(headInterval->Description,99, line5);
+#ifdef TARGET_OS_MAC
+                strncpy(headInterval->Description,line5,99);
+#else
+                strcpy_s(headInterval->Description,99, line5);
+#endif
 			}
 			else if (strcmp("Monthly", line1)==0)
 			{
@@ -486,7 +494,11 @@ int GetBills(short&BeginM, short&BeginD, short&BeginY,
 				headMonthly->StartY = Year;
 				headMonthly->Amount = (1.0-2.0*(Minus==1))*
 					((double)Dollars+( (double)Cents /100.0));
-				strcpy_s(headMonthly->Description,99, line5);
+#ifdef TARGET_OS_MAC
+                strncpy(headMonthly->Description,line5,99);
+#else
+                strcpy_s(headMonthly->Description,99, line5);
+#endif
 				headMonthly->HasStarted=0;
 			}
 
@@ -541,7 +553,11 @@ int GetBills(short&BeginM, short&BeginD, short&BeginY,
 				headBimonthly->StartY = Year;
 				headBimonthly->Amount = (1.0-2.0*(Minus==1))*
 					((double)Dollars+( (double)Cents /100.0));
-				strcpy_s(headBimonthly->Description,99, line5);
+#ifdef TARGET_OS_MAC
+                strncpy(headBimonthly->Description,line5,99);
+#else
+                strcpy_s(headBimonthly->Description,99, line5);
+#endif
 				headBimonthly->HasStarted=0;
 			}
 			else
