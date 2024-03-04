@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		88A5D3A920F7096A00C25D0C /* BillIntervals.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88A5D3A820F7096A00C25D0C /* BillIntervals.cpp */; };
+		C3F809E12B954EC0001252FF /* BillIntervals.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3F809E02B954EC0001252FF /* BillIntervals.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +26,7 @@
 /* Begin PBXFileReference section */
 		88A5D39E20F7095400C25D0C /* BillIntervalsMacOS */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = BillIntervalsMacOS; sourceTree = BUILT_PRODUCTS_DIR; };
 		88A5D3A820F7096A00C25D0C /* BillIntervals.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BillIntervals.cpp; path = ../../BillIntervals.cpp; sourceTree = "<group>"; };
+		C3F809E02B954EC0001252FF /* BillIntervals.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BillIntervals.cpp; path = ../../BillIntervals.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +59,7 @@
 		88A5D3A020F7095400C25D0C /* BillIntervalsMacOS */ = {
 			isa = PBXGroup;
 			children = (
+				C3F809E02B954EC0001252FF /* BillIntervals.cpp */,
 				88A5D3A820F7096A00C25D0C /* BillIntervals.cpp */,
 			);
 			path = BillIntervalsMacOS;
@@ -119,6 +122,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				88A5D3A920F7096A00C25D0C /* BillIntervals.cpp in Sources */,
+				C3F809E12B954EC0001252FF /* BillIntervals.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
